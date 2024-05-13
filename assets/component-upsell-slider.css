@@ -1,0 +1,70 @@
+.upsell-slider-container {
+  width: 750px;
+  margin: auto;
+  overflow-x: hidden;
+  padding: 10px 20px;
+}
+
+.slider {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: left 0.5s;
+  position: relative;
+  left: 0;
+}
+
+.upsell-slider-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider .slide:not(:first-child) {
+  padding: 0 2rem; 
+}
+
+.slider .slide:first-child {
+  padding-right: 2rem; 
+}
+
+.slide {
+  display: flex;
+}
+
+.upsell-slider-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.prev-button,
+.next-button {
+  font-size: 1.5rem;
+  background: none;
+  border: 1px solid black;
+  padding: .6rem .8rem;
+  z-index: 10;
+}
+
+.prev-button:active,
+.next-button:active {
+  font-weight: bold;
+}
+
+.prev-button:disabled,
+.next-button:disabled {
+  border-color: #DBDBDB;
+  pointer-events: none;
+}
+
+.prev-button::after {
+  content: '<'
+}
+
+.next-button::after {
+  content: '>'
+}

@@ -1,0 +1,94 @@
+{{ 'component-upsell-slider.css' | asset_url | stylesheet_tag }}
+
+<div class='upsell-slider-container'>
+  <div id='slider' class='slider'>
+    {% for product in upsell_products %}
+    <div class='slide'>
+      {% render 'upsell-product-card', upsell_product: product, upsell_is_by_button: upsell_is_by_button %}
+    </div>
+  {% endfor %}
+  </div>
+  {% if upsell_products_count > 3 %}
+    <div class='upsell-slider-actions'>
+      <button id='upsell-slider-prev-button' class='prev-button'></button>
+      <button id='upsell-slider-next-button' class='next-button'></button>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  const slider = document.getElementById('slider');
+  const slideInterval = 200;
+  const slide_width = slider.scrollWidth;
+  const prevButton = document.getElementById('upsell-slider-prev-button');
+  const nextButton = document.getElementById('upsell-slider-next-button');
+  const byNowButtons = document.getElementsByClassName('upsell_by_now_button');
+  
+  prevButton.disabled = true;
+  
+  for(let button of byNowButtons) {
+    button.addEventListener('click', () => {
+      const variantId = button.getAttribute('product-variants');
+
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [{
+            'id': variantId,
+            'quantity': 1,
+            'properties': {
+              'isUpsell': 'true'
+            }
+          }]
+        })
+      })
+      .then(response => {
+        button.classList.add('loading__button');
+        return response.json();
+      })
+      .catch((error) => {
+        button.classList.remove('loading__button');
+      })
+      .finally(() => {
+        button.classList.remove('loading__button');
+      })
+    })
+  }
+  
+  const slide = (event) => {
+    const currentPropertyLeftSlider= parseInt(getComputedStyle(slider).left);
+    let newPosLeftSlider;
+
+    if(event.currentTarget === nextButton){
+        if(Math.abs(currentPropertyLeftSlider) + slideInterval + slider.clientWidth >= slider.scrollWidth){
+          nextButton.disabled = true;
+          newPosLeftSlider= `-${slider.scrollWidth - slider.clientWidth}px`;
+        } else {
+          newPosLeftSlider= `${currentPropertyLeftSlider - slideInterval}px`;
+          prevButton.disabled = false;
+        }
+      
+        slider.style.left= newPosLeftSlider;
+    }
+
+    if(event.currentTarget === prevButton){
+        newPosLeftSlider = currentPropertyLeftSlider + slideInterval;
+        
+        if(newPosLeftSlider > 0) {
+          prevButton.disabled = true;
+          slider.style.left='0px';
+        } else {
+          nextButton.disabled = false;
+          slider.style.left= `${newPosLeftSlider}px`;
+        }
+    }
+  }
+
+  if (prevButton && nextButton) {
+    prevButton.addEventListener('click', slide);
+    nextButton.addEventListener('click', slide);
+  }
+</script>

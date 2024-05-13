@@ -1,0 +1,69 @@
+.upsell_card {
+  cursor: pointer;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.upsell_card a {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  text-decoration: none;
+}
+
+.upsell_by_now_button {
+  background: none;
+  cursor: pointer;
+  border: 1px solid black;
+  padding: .5rem;
+  position: relative;
+}
+
+.upsell_by_now_button:hover {
+  background: #DAD7D7;
+}
+
+.button-text {
+  transition: all 0.2s;
+}
+
+.loading__button .button-text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.loading__button::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top-color: black;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.upsell_card-price {
+  display: block;
+}

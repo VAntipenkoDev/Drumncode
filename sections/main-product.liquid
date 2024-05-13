@@ -9,6 +9,7 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'component-upsell.css' | asset_url | stylesheet_tag }}
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
     {{ 'component-swatch-input.css' | asset_url | stylesheet_tag }}
@@ -82,6 +83,18 @@
 
           {%- for block in section.blocks -%}
             {%- case block.type -%}
+              {%- when 'upsell'-%}
+                {% assign upsell_products = product.metafields.custom.upsell_data.value.products_for_upsell.value %}
+                {% assign upsell_block_title = block.settings.upsell_block_title %}
+                {% assign upsell_vertical_margin = block.settings.vertical_margin %}
+                {% assign upsell_products_count = upsell_products.count %}
+                {% assign upsell_is_by_button = block.settings.upsell_by_button %}
+                <div class='upsell_wrapper' style="margin: {{ upsell_vertical_margin }}px 0">
+                  <p class='usell_block_title'>{{ upsell_block_title }}</p>
+                  <div class='upsell_content'>
+                    {% render 'upsell-product-card-slider', upsell_products: upsell_products, upsell_products_count: upsell_products_count, upsell_is_by_button: upsell_is_by_button %}
+                  </div>
+                </div>
               {%- when '@app' -%}
                 {% render block %}
               {%- when 'text' -%}
@@ -753,6 +766,35 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "upsell",
+      "name": "upsell",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Upsell settings"
+        },
+        {
+          "type": "text",
+          "id": "upsell_block_title",
+          "label": "Section title"
+        },
+        {
+          "type": "range",
+          "id": "vertical_margin",
+          "label": "Vertical margin",
+          "default": 2,
+          "min": 0,
+          "max": 100
+        },
+        {
+          "type": "checkbox",
+          "id": "upsell_by_button",
+          "label": "Activate buy button",
+          "default": true
+        }
+      ]
     },
     {
       "type": "text",

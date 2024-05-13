@@ -1,0 +1,16 @@
+{{ 'component-upsell-card.css' | asset_url | stylesheet_tag }}
+
+<div class='upsell_card'>
+  <a href="{{ shop.url }}/products/{{ upsell_product.handle }}" target=”_blank”>
+    <p class='upsell_card-title'>{{ upsell_product.title }}</p>
+    <div class='upsell_card-image'> {{ upsell_product.featured_image | image_url: width: 50, height: 65 | image_tag }} </div>
+    <span class='upsell_card-price'>{{ upsell_product.price | money }} </span>
+  </a>
+  {% if upsell_is_by_button %}
+    <button product-variants={{ upsell_product.variants[0].id }} class='upsell_by_now_button'>
+      <span class='button-text'>
+        By now
+      </span>
+    </button>
+  {% endif %}
+</div>

@@ -1,0 +1,7 @@
+.upsell_wrapper {
+  overflow: hidden;
+}
+
+.upsell_content {
+  display: flex;
+}
